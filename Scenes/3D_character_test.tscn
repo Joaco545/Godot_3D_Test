@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://tucso370ugvr"]
+
+[ext_resource type="Script" path="res://Scripts/player.gd" id="1_longn"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_25lms"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_nni86"]
+sky_material = SubResource("ProceduralSkyMaterial_25lms")
+
+[sub_resource type="Environment" id="Environment_g02ho"]
+background_mode = 2
+sky = SubResource("Sky_nni86")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4rmy0"]
+
+[node name="World" type="Node3D"]
+
+[node name="stage" type="Node3D" parent="."]
+
+[node name="Floor_Origin" type="CSGBox3D" parent="stage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(20, 1, 20)
+
+[node name="Floor_High" type="CSGBox3D" parent="stage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1.8, 5)
+use_collision = true
+size = Vector3(20, 1, 20)
+
+[node name="enviroment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="enviroment"]
+environment = SubResource("Environment_g02ho")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="enviroment"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="player" type="CharacterBody3D" parent="."]
+script = ExtResource("1_longn")
+
+[node name="standing_collision_shape" type="CollisionShape3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_4rmy0")
+
+[node name="head" type="Node3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Camera3D" type="Camera3D" parent="player/head"]
+fov = 90.0
