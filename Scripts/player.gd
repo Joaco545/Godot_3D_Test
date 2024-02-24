@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 # Movement
+@export_group("Movement")
 @export var jumpVelocity = 7.0
 @export var baseSpeed = 5.0
 @export var sprintModifier = 1.3
@@ -13,6 +14,7 @@ const lerpSpeed = 10.0
 var direction = Vector3.ZERO
 
 # Head movement
+@export_group("Head Movement")
 @onready var head = $head
 @export var headStandPos = 1.8
 @export var headCrouchPos = 1
