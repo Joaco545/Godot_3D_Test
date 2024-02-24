@@ -14,6 +14,8 @@ var direction = Vector3.ZERO
 
 # Head movement
 @onready var head = $head
+@export var headStandPos = 1.8
+@export var headCrouchPos = 1
 @export var mouseSensitivity = 0.25
 
 # Collision/crouching
@@ -137,10 +139,12 @@ func _on_jump_state_physics_processing(delta):
 
 # Swap colliders to crouching
 # Turn on head raycast
+# Move head to crouch pos
 func _on_crouch_state_entered():
 	standing_collider.disabled = true
 	crouching_collider.disabled = false
 	headbump_raycast.enabled = true
+	head.position.y = headCrouchPos
 	
 
 
@@ -152,8 +156,10 @@ func _on_crouch_state_physics_processing(delta):
 
 # Swap colliders to standing
 # Turn off head raycast
+# Move head to standing position
 func _on_crouch_state_exited():
 	standing_collider.disabled = false
 	crouching_collider.disabled = true
 	headbump_raycast.enabled = false
+	head.position.y = headStandPos
 	
