@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dox4prgxmmhf6"]
+
+[ext_resource type="Texture2D" uid="uid://djvlwm7bxjd7r" path="res://Textures/3d_character_test/Floor/Vector grid marking for user HUD interface.jpg" id="1_ycp2w"]
+
+[resource]
+albedo_texture = ExtResource("1_ycp2w")
+uv1_scale = Vector3(0.25, 0.25, 0.25)
+uv1_offset = Vector3(0, 0.125, 0)
+uv1_triplanar = true

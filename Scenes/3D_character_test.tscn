@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://tucso370ugvr"]
+[gd_scene load_steps=13 format=3 uid="uid://tucso370ugvr"]
 
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="1_7rh46"]
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_longn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_kvycd"]
+[ext_resource type="Material" uid="uid://dox4prgxmmhf6" path="res://Materials/3d_chrachter_test/FloorMatetial.tres" id="2_u3lh2"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_yau70"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_3nl4q"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_vh06y"]
@@ -39,11 +40,13 @@ initial_node_to_watch = NodePath("../player/player_state")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 use_collision = true
 size = Vector3(20, 1, 20)
+material = ExtResource("2_u3lh2")
 
 [node name="Floor_High" type="CSGBox3D" parent="stage"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1.8, 5)
 use_collision = true
 size = Vector3(20, 1, 20)
+material = ExtResource("2_u3lh2")
 
 [node name="enviroment" type="Node3D" parent="."]
 
