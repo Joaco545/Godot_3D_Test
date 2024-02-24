@@ -1,6 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://tucso370ugvr"]
+[gd_scene load_steps=12 format=3 uid="uid://tucso370ugvr"]
 
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="1_7rh46"]
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_longn"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_kvycd"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_yau70"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_3nl4q"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_vh06y"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_25lms"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -17,7 +22,16 @@ glow_enabled = true
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4rmy0"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xetnu"]
+height = 1.2
+
 [node name="World" type="Node3D"]
+
+[node name="StateChartDebugger" parent="." instance=ExtResource("1_7rh46")]
+offset_left = 626.0
+offset_bottom = -261.0
+enabled = false
+initial_node_to_watch = NodePath("../player/player_state")
 
 [node name="stage" type="Node3D" parent="."]
 
@@ -47,8 +61,107 @@ script = ExtResource("1_longn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_4rmy0")
 
+[node name="crouching_collision_shape" type="CollisionShape3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("CapsuleShape3D_xetnu")
+disabled = true
+
 [node name="head" type="Node3D" parent="player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 
 [node name="Camera3D" type="Camera3D" parent="player/head"]
 fov = 90.0
+
+[node name="headbump_raycast" type="RayCast3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+enabled = false
+target_position = Vector3(0, 0.8, 0)
+
+[node name="player_state" type="Node" parent="player"]
+script = ExtResource("2_kvycd")
+
+[node name="root_state" type="Node" parent="player/player_state"]
+script = ExtResource("3_yau70")
+initial_state = NodePath("walk")
+
+[node name="walk" type="Node" parent="player/player_state/root_state"]
+script = ExtResource("4_3nl4q")
+
+[node name="to_run" type="Node" parent="player/player_state/root_state/walk"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../run")
+event = &"run"
+
+[node name="to_jump" type="Node" parent="player/player_state/root_state/walk"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../jump")
+event = &"jump"
+
+[node name="to_crouch" type="Node" parent="player/player_state/root_state/walk"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../crouch")
+event = &"crouch"
+
+[node name="run" type="Node" parent="player/player_state/root_state"]
+script = ExtResource("4_3nl4q")
+
+[node name="to_walk" type="Node" parent="player/player_state/root_state/run"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../walk")
+event = &"walk"
+
+[node name="to_jump" type="Node" parent="player/player_state/root_state/run"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../jump")
+event = &"jump"
+
+[node name="to_crouch" type="Node" parent="player/player_state/root_state/run"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../crouch")
+event = &"crouch"
+
+[node name="jump" type="Node" parent="player/player_state/root_state"]
+script = ExtResource("4_3nl4q")
+
+[node name="to_walk" type="Node" parent="player/player_state/root_state/jump"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../walk")
+event = &"walk"
+
+[node name="to_run" type="Node" parent="player/player_state/root_state/jump"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../run")
+event = &"run"
+
+[node name="to_crouch" type="Node" parent="player/player_state/root_state/jump"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../crouch")
+event = &"crouch"
+
+[node name="crouch" type="Node" parent="player/player_state/root_state"]
+script = ExtResource("4_3nl4q")
+
+[node name="to_walk" type="Node" parent="player/player_state/root_state/crouch"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../walk")
+event = &"walk"
+
+[node name="to_run" type="Node" parent="player/player_state/root_state/crouch"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../run")
+event = &"run"
+
+[node name="to_jump" type="Node" parent="player/player_state/root_state/crouch"]
+script = ExtResource("5_vh06y")
+to = NodePath("../../jump")
+event = &"jump"
+
+[connection signal="state_entered" from="player/player_state/root_state/walk" to="player" method="_on_walk_state_entered"]
+[connection signal="state_physics_processing" from="player/player_state/root_state/walk" to="player" method="_on_walk_state_physics_processing"]
+[connection signal="state_entered" from="player/player_state/root_state/run" to="player" method="_on_run_state_entered"]
+[connection signal="state_physics_processing" from="player/player_state/root_state/run" to="player" method="_on_run_state_physics_processing"]
+[connection signal="state_entered" from="player/player_state/root_state/jump" to="player" method="_on_jump_state_entered"]
+[connection signal="state_physics_processing" from="player/player_state/root_state/jump" to="player" method="_on_jump_state_physics_processing"]
+[connection signal="state_entered" from="player/player_state/root_state/crouch" to="player" method="_on_crouch_state_entered"]
+[connection signal="state_exited" from="player/player_state/root_state/crouch" to="player" method="_on_crouch_state_exited"]
+[connection signal="state_physics_processing" from="player/player_state/root_state/crouch" to="player" method="_on_crouch_state_physics_processing"]
