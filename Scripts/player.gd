@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 # Movement
-const jumpVelocity = 7.0
-const baseSpeed = 5.0
+@export var jumpVelocity = 7.0
+@export var baseSpeed = 5.0
 @export var sprintModifier = 1.3
 @export var crouchModifier = 0.8
 @export var airModifier = 1 # Set to 0 to disable airstrafe
