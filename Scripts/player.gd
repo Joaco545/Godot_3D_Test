@@ -56,7 +56,7 @@ func _physics_process(delta):
 	var stateIdx = 0
 	
 	# Check inputs with priority: jump -> run -> crouch -> walk
-	if Input.is_action_pressed("jump"):
+	if Input.is_action_pressed("jump") and is_on_floor():
 		stateIdx = 2 # set jump
 		
 	elif Input.is_action_pressed("sprint"):
